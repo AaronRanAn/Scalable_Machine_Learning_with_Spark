@@ -757,7 +757,7 @@ Test.assertTrue(np.allclose(rmseValLR1, 19.691247), 'incorrect value for rmseVal
 # #### ** (4d) Grid search **
 # #### We're already outperforming the baseline on the validation set by almost 2 years on average, but let's see if we can do better. Perform grid search to find a good regularization parameter.  Try `regParam` values `1e-10`, `1e-5`, and `1`.
 
-# In[ ]:
+# In[84]:
 
 # TODO: Replace <FILL IN> with appropriate code
 bestRMSE = rmseValLR1
@@ -767,7 +767,7 @@ bestModel = firstModel
 numIters = 500
 alpha = 1.0
 miniBatchFrac = 1.0
-for reg in <FILL IN>:
+for reg in (1e-10,1e-5,1):
     model = LinearRegressionWithSGD.train(parsedTrainData, numIters, alpha,
                                           miniBatchFrac, regParam=reg,
                                           regType='l2', intercept=True)
@@ -785,7 +785,7 @@ print ('Validation RMSE:\n\tBaseline = {0:.3f}\n\tLR0 = {1:.3f}\n\tLR1 = {2:.3f}
        '\tLRGrid = {3:.3f}').format(rmseValBase, rmseValLR0, rmseValLR1, rmseValLRGrid)
 
 
-# In[ ]:
+# In[85]:
 
 # TEST Grid search (4d)
 Test.assertTrue(np.allclose(17.017170, rmseValLRGrid), 'incorrect value for rmseValLRGrid')
@@ -794,7 +794,7 @@ Test.assertTrue(np.allclose(17.017170, rmseValLRGrid), 'incorrect value for rmse
 # #### ** Visualization 5: Best model's predictions**
 # #### Next, we create a visualization similar to 'Visualization 3: Predicted vs. actual' from Part 2 using the predictions from the best model from Part (4d) on the validation dataset.  Specifically, we create a color-coded scatter plot visualizing tuples storing i) the predicted value from this model and ii) true label.
 
-# In[ ]:
+# In[86]:
 
 predictions = np.asarray(parsedValData
                          .map(lambda lp: bestModel.predict(lp.features))
@@ -847,7 +847,7 @@ Test.assertTrue(np.allclose(sorted(modelRMSEs)[:3], expectedResults), 'incorrect
 # #### **Visualization 6: Hyperparameter heat map **
 # #### Next, we perform a visualization of hyperparameter search using a larger set of hyperparameters (with precomputed results).  Specifically, we create a heat map where the brighter colors correspond to lower RMSE values.  The first plot has a large area with brighter colors.  In order to differentiate within the bright region, we generate a second plot corresponding to the hyperparameters found within that region.
 
-# In[ ]:
+# In[87]:
 
 from matplotlib.colors import LinearSegmentedColormap
 
@@ -875,7 +875,7 @@ image = plt.imshow(rmseVal,interpolation='nearest', aspect='auto',
                     cmap = colors)
 
 
-# In[ ]:
+# In[88]:
 
 # Zoom into the bottom left
 numItersParamsZoom, regParamsZoom = numItersParams[-3:], regParams[:4]
