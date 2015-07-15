@@ -900,7 +900,41 @@ pass
 # #### So far, we've used the features as they were provided.  Now, we will add features that capture the two-way interactions between our existing features.  Write a function `twoWayInteractions` that takes in a `LabeledPoint` and generates a new `LabeledPoint` that contains the old features and the two-way interactions between them.  Note that a dataset with three features would have nine ( $ \scriptsize 3^2 $ ) two-way interactions.
 # #### You might want to use [itertools.product](https://docs.python.org/2/library/itertools.html#itertools.product) to generate tuples for each of the possible 2-way interactions.  Remember that you can combine two `DenseVector` or `ndarray` objects using [np.hstack](http://docs.scipy.org/doc/numpy/reference/generated/numpy.hstack.html#numpy.hstack).
 
-# In[ ]:
+# In[101]:
+
+import itertools
+
+def twoWayInteractions(lp):
+    """Creates a new `LabeledPoint` that includes two-way interactions.
+
+    Note:
+        For features [x, y] the two-way interactions would be [x^2, x*y, y*x, y^2] and these
+        would be appended to the original [x, y] feature list.
+
+    Args:
+        lp (LabeledPoint): The label and features for this observation.
+
+    Returns:
+        LabeledPoint: The new `LabeledPoint` should have the same label as `lp`.  Its features
+            should include the features from `lp` followed by the two-way interaction features.
+    """
+    newFeatures = list(itertools.product(lp.features,repeat=2))
+    
+    twi_features = [x*y for (x,y) in newFeatures]
+    
+    newcomb = np.hstack((lp.label, twi_features))
+    
+    newLP = LabeledPoint(newcomb[0],newcomb[1:])
+    
+    return newLP
+
+
+# In[105]:
+
+parsedTestData.take(1)
+
+
+# In[123]:
 
 # TODO: Replace <FILL IN> with appropriate code
 import itertools
@@ -919,17 +953,25 @@ def twoWayInteractions(lp):
         LabeledPoint: The new `LabeledPoint` should have the same label as `lp`.  Its features
             should include the features from `lp` followed by the two-way interaction features.
     """
-    <FILL IN>
+    newFeatures = itertools.product(lp.features,repeat=2)
+    
+    twi_features =  np.array([x*y for (x,y) in newFeatures])
+    
+    newfeatures = np.hstack((lp.features, twi_features))
+    
+    newLP = LabeledPoint(lp.label,newfeatures)
+    
+    return newLP
 
 print twoWayInteractions(LabeledPoint(0.0, [2, 3]))
 
 # Transform the existing train, validation, and test sets to include two-way interactions.
-trainDataInteract = <FILL IN>
-valDataInteract = <FILL IN>
-testDataInteract = <FILL IN>
+trainDataInteract = parsedTrainData.map(lambda lp:twoWayInteractions(lp))
+valDataInteract = parsedValData.map(lambda lp:twoWayInteractions(lp))
+testDataInteract = parsedTestData.map(lambda lp:twoWayInteractions(lp))
 
 
-# In[ ]:
+# In[122]:
 
 # TEST Add two-way interactions (5a)
 twoWayExample = twoWayInteractions(LabeledPoint(0.0, [2, 3]))
@@ -953,7 +995,7 @@ Test.assertTrue(np.allclose(sum(testDataInteract.take(1)[0].features), 35.109111
 # #### Now, let's build the new model.  We've done this several times now.  To implement this for the new features, we need to change a few variable names.  Remember that we should build our model from the training data and evaluate it on the validation data.
 # ####  Note that you should re-run your hyperparameter search after changing features, as using the best hyperparameters from your prior model will not necessary lead to the best model.  For this exercise, we have already preset the hyperparameters to reasonable values.
 
-# In[ ]:
+# In[124]:
 
 # TODO: Replace <FILL IN> with appropriate code
 numIters = 500
@@ -961,10 +1003,10 @@ alpha = 1.0
 miniBatchFrac = 1.0
 reg = 1e-10
 
-modelInteract = LinearRegressionWithSGD.train(<FILL IN>, numIters, alpha,
+modelInteract = LinearRegressionWithSGD.train(trainDataInteract, numIters, alpha,
                                               miniBatchFrac, regParam=reg,
                                               regType='l2', intercept=True)
-labelsAndPredsInteract = <FILL IN>.map(lambda lp: (lp.label, <FILL IN>.predict(lp.features)))
+labelsAndPredsInteract = valDataInteract.map(lambda lp: (lp.label, modelInteract.predict(lp.features)))
 rmseValInteract = calcRMSE(labelsAndPredsInteract)
 
 print ('Validation RMSE:\n\tBaseline = {0:.3f}\n\tLR0 = {1:.3f}\n\tLR1 = {2:.3f}\n\tLRGrid = ' +
@@ -972,7 +1014,7 @@ print ('Validation RMSE:\n\tBaseline = {0:.3f}\n\tLR0 = {1:.3f}\n\tLR1 = {2:.3f}
                                                  rmseValLRGrid, rmseValInteract)
 
 
-# In[ ]:
+# In[125]:
 
 # TEST Build interaction model (5b)
 Test.assertTrue(np.allclose(rmseValInteract, 15.6894664683), 'incorrect value for rmseValInteract')
@@ -982,17 +1024,18 @@ Test.assertTrue(np.allclose(rmseValInteract, 15.6894664683), 'incorrect value fo
 # #### Our final step is to evaluate the new model on the test dataset.  Note that we haven't used the test set to evaluate any of our models.  Because of this, our evaluation provides us with an unbiased estimate for how our model will perform on new data.  If we had changed our model based on viewing its performance on the test set, our estimate of RMSE would likely be overly optimistic.
 # #### We'll also print the RMSE for both the baseline model and our new model.  With this information, we can see how much better our model performs than the baseline model.
 
-# In[ ]:
+# In[126]:
 
 # TODO: Replace <FILL IN> with appropriate code
-labelsAndPredsTest = <FILL IN>
-rmseTestInteract = <FILL IN>
+
+labelsAndPredsTest = testDataInteract.map(lambda lp: (lp.label, modelInteract.predict(lp.features)))
+rmseTestInteract = calcRMSE(labelsAndPredsTest)
 
 print ('Test RMSE:\n\tBaseline = {0:.3f}\n\tLRInteract = {1:.3f}'
        .format(rmseTestBase, rmseTestInteract))
 
 
-# In[ ]:
+# In[127]:
 
 # TEST Evaluate interaction model on test data (5c)
 Test.assertTrue(np.allclose(rmseTestInteract, 16.3272040537),
