@@ -820,14 +820,14 @@ pass
 # #### ** (4e) Vary alpha and the number of iterations **
 # #### In the previous grid search, we set `alpha = 1` for all experiments.  Now let's see what happens when we vary `alpha`.  Specifically, try `1e-5` and `10` as values for `alpha` and also try training models for 500 iterations (as before) but also for 5 iterations. Evaluate all models on the validation set.  Note that if we set `alpha` too small the gradient descent will require a huge number of steps to converge to the solution, and if we use too large of an `alpha` it can cause numerical problems, like you'll see below for `alpha = 10`.
 
-# In[ ]:
+# In[128]:
 
 # TODO: Replace <FILL IN> with appropriate code
 reg = bestRegParam
 modelRMSEs = []
 
-for alpha in <FILL IN>:
-    for numIters in <FILL IN>:
+for alpha in (1e-5,10):
+    for numIters in (500,5):
         model = LinearRegressionWithSGD.train(parsedTrainData, numIters, alpha,
                                               miniBatchFrac, regParam=reg,
                                               regType='l2', intercept=True)
@@ -837,7 +837,7 @@ for alpha in <FILL IN>:
         modelRMSEs.append(rmseVal)
 
 
-# In[ ]:
+# In[129]:
 
 # TEST Vary alpha and the number of iterations (4e)
 expectedResults = sorted([56.969705, 56.892949, 355124752.221221])
