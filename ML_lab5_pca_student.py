@@ -879,7 +879,7 @@ pass
 # #### $$\begin{bmatrix} 1 & 0 & 1 \\\ 0 & 3 & 0 \end{bmatrix} \begin{bmatrix} 1 \\\ 2 \\\ 3 \end{bmatrix} = \begin{bmatrix} 4 \\\ 6 \end{bmatrix} $$
 # #### For this exercise, you'll create several arrays that perform different types of aggregation.  The aggregation is specified in the comments before each array.  You should fill in the array values by hand.  We'll automate array creation in the next two exercises.
 
-# In[ ]:
+# In[115]:
 
 # TODO: Replace <FILL IN> with appropriate code
 vector = np.array([0., 1., 2., 3., 4., 5.])
@@ -888,26 +888,27 @@ vector = np.array([0., 1., 2., 3., 4., 5.])
 # a two element array where the first element is the sum of the 0, 2, and 4 indexed elements of
 # vector and the second element is the sum of the 1, 3, and 5 indexed elements of vector.
 # This should be a 2 row by 6 column array
-sumEveryOther = np.array(<FILL IN>)
+sumEveryOther = np.array([[1., 0., 1., 0., 1., 0.], [0., 1., 0., 1., 0., 1.]])
 
 # Create a multi-dimensional array that when multiplied (using .dot) against vector, results in a
 # three element array where the first element is the sum of the 0 and 3 indexed elements of vector,
 # the second element is the sum of the 1 and 4 indexed elements of vector, and the third element is
 # the sum of the 2 and 5 indexed elements of vector.
 # This should be a 3 row by 6 column array
-sumEveryThird = np.array(<FILL IN>)
+
+sumEveryThird = np.array([[1.,0.,0.,1.,0.,0.],[0.,1.,0.,0.,1.,0.],[0.,0.,1.,0.,0.,1.]])
 
 # Create a multi-dimensional array that can be used to sum the first three elements of vector and
 # the last three elements of vector, which returns a two element array with those values when dotted
 # with vector.
 # This should be a 2 row by 6 column array
-sumByThree = np.array(<FILL IN>)
+sumByThree = np.array([[1.,1.,1.,0.,0.,0.],[0.,0.,0.,1.,1.,1.]])
 
 # Create a multi-dimensional array that sums the first two elements, second two elements, and
 # last two elements of vector, which returns a three element array with those values when dotted
 # with vector.
 # This should be a 3 row by 6 column array
-sumByTwo = np.array(<FILL IN>)
+sumByTwo = np.array([[1.,1.,0.,0.,0.,0.],[0.,0.,1.,1.,0.,0.],[0.,0.,0.,0.,1.,1.]])
 
 print 'sumEveryOther.dot(vector):\t{0}'.format(sumEveryOther.dot(vector))
 print 'sumEveryThird.dot(vector):\t{0}'.format(sumEveryThird.dot(vector))
@@ -916,7 +917,7 @@ print '\nsumByThree.dot(vector):\t{0}'.format(sumByThree.dot(vector))
 print 'sumByTwo.dot(vector): \t{0}'.format(sumByTwo.dot(vector))
 
 
-# In[ ]:
+# In[116]:
 
 # TEST Aggregation using arrays (4a)
 Test.assertEquals(sumEveryOther.shape, (2, 6), 'incorrect shape for sumEveryOther')
@@ -937,19 +938,19 @@ Test.assertTrue(np.allclose(sumByTwo.dot(vector), [1, 5, 9]), 'incorrect value f
 # #### $$ np.eye( 3 ) \to \begin{bmatrix} 1 & 0 & 0 \\\ 0 & 1 & 0 \\\ 0 & 0 & 1 \end{bmatrix} $$
 # #### In this exercise, recreate `sumEveryOther` and `sumEveryThird` using `np.tile` and `np.eye`.
 
-# In[ ]:
+# In[117]:
 
 # Reference for what to recreate
 print 'sumEveryOther: \n{0}'.format(sumEveryOther)
 print '\nsumEveryThird: \n{0}'.format(sumEveryThird)
 
 
-# In[ ]:
+# In[124]:
 
 # TODO: Replace <FILL IN> with appropriate code
 # Use np.tile and np.eye to recreate the arrays
-sumEveryOtherTile = <FILL IN>
-sumEveryThirdTile = <FILL IN>
+sumEveryOtherTile = np.tile(np.eye(2),3)
+sumEveryThirdTile = np.tile(np.eye(3),2)
 
 print sumEveryOtherTile
 print 'sumEveryOtherTile.dot(vector): {0}'.format(sumEveryOtherTile.dot(vector))
@@ -957,7 +958,7 @@ print '\n', sumEveryThirdTile
 print 'sumEveryThirdTile.dot(vector): {0}'.format(sumEveryThirdTile.dot(vector))
 
 
-# In[ ]:
+# In[125]:
 
 # TEST Recreate with `np.tile` and `np.eye` (4b)
 Test.assertEquals(sumEveryOtherTile.shape, (2, 6), 'incorrect shape for sumEveryOtherTile')
@@ -975,19 +976,19 @@ Test.assertTrue(np.allclose(sumEveryThirdTile.dot(vector), [3, 5, 7]),
 # #### $$ \begin{bmatrix} 1 & 2 \\\ 3 & 4 \end{bmatrix} \otimes \begin{bmatrix} 1 & 2 \\\ 3 & 4 \end{bmatrix} = \begin{bmatrix} 1 \cdot 1 & 1 \cdot 2 & 2 \cdot 1 & 2 \cdot 2 \\\ 1 \cdot 3 & 1 \cdot 4 & 2 \cdot 3 & 2 \cdot 4 \\\ 3 \cdot 1 & 3 \cdot 2 & 4 \cdot 1 & 4 \cdot 2 \\\ 3 \cdot 3 & 3 \cdot 4 & 4 \cdot 3 & 4 \cdot 4 \end{bmatrix} = \begin{bmatrix} 1 & 2 & 2 & 4 \\\ 3 & 4 & 6 & 8 \\\ 3 & 6 & 4 & 8 \\\ 9 & 12 & 12 & 16 \end{bmatrix} $$
 # #### For this exercise, you'll recreate the `sumByThree` and `sumByTwo` arrays using `np.kron`, `np.eye`, and `np.ones`.  Note that `np.ones` creates an array of all ones.
 
-# In[ ]:
+# In[126]:
 
 # Reference for what to recreate
 print 'sumByThree: \n{0}'.format(sumByThree)
 print '\nsumByTwo: \n{0}'.format(sumByTwo)
 
 
-# In[ ]:
+# In[133]:
 
 # TODO: Replace <FILL IN> with appropriate code
 # Use np.kron, np.eye, and np.ones to recreate the arrays
-sumByThreeKron = <FILL IN>
-sumByTwoKron = <FILL IN>
+sumByThreeKron = np.kron(np.eye(2),np.ones(3))
+sumByTwoKron = np.kron(np.eye(3),np.ones(2))
 
 print sumByThreeKron
 print 'sumByThreeKron.dot(vector): {0}'.format(sumByThreeKron.dot(vector))
@@ -995,7 +996,7 @@ print '\n', sumByTwoKron
 print 'sumByTwoKron.dot(vector): {0}'.format(sumByTwoKron.dot(vector))
 
 
-# In[ ]:
+# In[134]:
 
 # TEST Recreate with `np.kron` (4c)
 Test.assertEquals(sumByThreeKron.shape, (2, 6), 'incorrect shape for sumByThreeKron')
@@ -1010,21 +1011,26 @@ Test.assertTrue(np.allclose(sumByTwoKron.dot(vector), [1, 5, 9]),
 #  
 # #### We can perform this aggregation using a map operation. First, build a multi-dimensional array $ \scriptsize \mathbf{T} $ that, when dotted with a 240-dimensional vector, sums every 20-th component of this vector and returns a 20-dimensional vector. Note that this exercise is similar to (4b).  Once you have created your multi-dimensional array $ \scriptsize \mathbf{T} $, use a `map` operation with that array and each time series to generate a transformed dataset. We'll cache and count the output, as we'll be using it again.
 
-# In[ ]:
+# In[137]:
+
+scaledData.take(1)
+
+
+# In[154]:
 
 # TODO: Replace <FILL IN> with appropriate code
 # Create a multi-dimensional array to perform the aggregation
-T = <FILL IN>
+T = np.tile(np.eye(20),12)
 
 # Transform scaledData using T.  Make sure to retain the keys.
-timeData = scaledData.<FILL IN>
+timeData = scaledData.map(lambda (k,v): (k,T.dot(v)))
 
 timeData.cache()
 print timeData.count()
 print timeData.first()
 
 
-# In[ ]:
+# In[155]:
 
 # TEST Aggregate by time (4d)
 Test.assertEquals(T.shape, (20, 240), 'incorrect shape for T')
@@ -1042,10 +1048,11 @@ Test.assertTrue(np.allclose(timeDataFifth[-2:],[-0.00636676, -0.0179427]),
 # #### **(4e) Obtain a compact representation**
 # #### We now have a time-aggregated dataset with $\scriptsize n = 46460$ pixels and $\scriptsize d = 20$ aggregated time features, and we want to use PCA to find a more compact representation.  Use the `pca` function from Part (2a) to perform PCA on the this data with $\scriptsize k = 3$, resulting in a new low-dimensional 46,460 by 3 dataset. As before, you'll need to extract the values from `timeData` since it is an RDD of key-value pairs.
 
-# In[ ]:
+# In[157]:
 
 # TODO: Replace <FILL IN> with appropriate code
-componentsTime, timeScores, eigenvaluesTime = <FILL IN>
+
+componentsTime, timeScores, eigenvaluesTime = pca(timeData.map(lambda x:x[1]),3)
 
 print 'componentsTime: (first five) \n{0}'.format(componentsTime[:5,:])
 print ('\ntimeScores (first three): \n{0}'
@@ -1053,7 +1060,7 @@ print ('\ntimeScores (first three): \n{0}'
 print '\neigenvaluesTime: (first five) \n{0}'.format(eigenvaluesTime[:5])
 
 
-# In[ ]:
+# In[158]:
 
 # TEST Obtain a compact representation (4e)
 Test.assertEquals(componentsTime.shape, (20, 3), 'incorrect shape for componentsTime')
@@ -1068,7 +1075,7 @@ Test.assertTrue(np.allclose(np.sum(eigenvaluesTime[:5]), 0.844764792),
 # #### ** Visualization 9: Top two components by time **
 # #### Let's view the scores from the first two PCs as a composite image. When we preprocess by aggregating by time and then perform PCA, we are only looking at variability related to temporal dynamics. As a result, if neurons appear similar -- have similar colors -- in the resulting image, it means that their responses vary similarly over time, regardless of how they might be encoding direction. In the image below, we can define the midline as the horizontal line across the middle of the brain.  We see clear patterns of neural activity in different parts of the brain, and crucially note that the regions on either side of the midline are similar, which suggests that temporal dynamics do not differ across the two sides of the brain.
 
-# In[ ]:
+# In[159]:
 
 scoresTime = np.vstack(timeScores.collect())
 imageOneTime = scoresTime[:,0].reshape(230, 202).T
@@ -1087,21 +1094,31 @@ pass
 #  
 # #### As in Part (4c), we'll design a multi-dimensional array $ \scriptsize \mathbf{D} $ that, when multiplied by a 240-dimensional vector, sums the first 20 components, then the second 20 components, and so on. Note that this is similar to exercise (4c).  First create $ \scriptsize \mathbf{D} $, then use a `map` operation with that array and each time series to generate a transformed dataset. We'll cache and count the output, as we'll be using it again.
 
-# In[ ]:
+# In[161]:
+
+np.kron(np.eye(2),np.ones(3))
+
+
+# In[162]:
+
+np.kron(np.eye(3),np.ones(2))
+
+
+# In[163]:
 
 # TODO: Replace <FILL IN> with appropriate code
 # Create a multi-dimensional array to perform the aggregation
-D = <FILL IN>
+D = np.kron(np.eye(12),np.ones(20))
 
 # Transform scaledData using D.  Make sure to retain the keys.
-directionData = scaledData.<FILL IN>
+directionData = scaledData.map(lambda (k,v): (k,D.dot(v)))
 
 directionData.cache()
 print directionData.count()
 print directionData.first()
 
 
-# In[ ]:
+# In[164]:
 
 # TEST Aggregate by direction (4f)
 Test.assertEquals(D.shape, (12, 240), 'incorrect shape for D')
@@ -1119,10 +1136,10 @@ Test.assertTrue(np.allclose(directionDataFifth[:2], [ 0.01479147, -0.02090099]),
 # #### **(4g) Compact representation of direction data**
 # #### We now have a direction-aggregated dataset with $\scriptsize n = 46460$ pixels and $\scriptsize d = 12$ aggregated direction features, and we want to use PCA to find a more compact representation.  Use the `pca` function from Part (2a) to perform PCA on the this data with $\scriptsize k = 3$, resulting in a new low-dimensional 46460 by 3 dataset. As before, you'll need to extract the values from `directionData` since it is an RDD of key-value pairs.
 
-# In[ ]:
+# In[165]:
 
 # TODO: Replace <FILL IN> with appropriate code
-componentsDirection, directionScores, eigenvaluesDirection = <FILL IN>
+componentsDirection, directionScores, eigenvaluesDirection = pca(directionData.map(lambda x:x[1]),3)
 
 print 'componentsDirection: (first five) \n{0}'.format(componentsDirection[:5,:])
 print ('\ndirectionScores (first three): \n{0}'
@@ -1130,7 +1147,7 @@ print ('\ndirectionScores (first three): \n{0}'
 print '\neigenvaluesDirection: (first five) \n{0}'.format(eigenvaluesDirection[:5])
 
 
-# In[ ]:
+# In[166]:
 
 # TEST Compact representation of direction data (4g)
 Test.assertEquals(componentsDirection.shape, (12, 3), 'incorrect shape for componentsDirection')
@@ -1146,7 +1163,7 @@ Test.assertTrue(np.allclose(np.sum(eigenvaluesDirection[:5]), 2.0089720377),
 # #### **Visualization 10: Top two components by direction**
 # #### Again, let's view the scores from the first two PCs as a composite image.  When we preprocess by averaging across time (group by direction), and then perform PCA, we are only looking at variability related to stimulus direction. As a result, if neurons appear similar -- have similar colors -- in the image, it means that their responses vary similarly across directions, regardless of how they evolve over time. In the image below, we see a different pattern of similarity across regions of the brain.  Moreover, regions on either side of the midline are colored differently, which suggests that we are looking at a property, direction selectivity, that has a different representation across the two sides of the brain.
 
-# In[ ]:
+# In[167]:
 
 scoresDirection = np.vstack(directionScores.collect())
 imageOneDirection = scoresDirection[:,0].reshape(230, 202).T
